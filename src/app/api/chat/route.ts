@@ -7,6 +7,13 @@ export async function POST(req:Request){
         model:groq("gemma2-9b-it"),
         messages:convertToModelMessages(messages)
     })
+    result.usage.then((usage)=>{
+        console.log({
+            inputTokens:usage.inputTokens,
+            outputTokens:usage.outputTokens,
+            totalTokens:usage.totalTokens
+        })
+    })
     console.log(JSON.stringify(messages, null, 2))
     return result.toUIMessageStreamResponse()        
     }catch(error){
