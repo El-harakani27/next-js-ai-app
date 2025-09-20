@@ -1,13 +1,18 @@
 import { generateText } from "ai";
 import { groq } from "@ai-sdk/groq";
-export async function POST(req:Request){
+export async function POST(){
     try{
-    const {prompt} = await req.json()
-    const {text} = await generateText({
-        model: groq("deepseek-r1-distill-llama-70b"),
-        prompt
+    
+    const response = await generateText({
+        model: groq("llama-3.3-70b-versatile"),
+        prompt:"You are a helpful AI assistant. Always answer concisely and accurately, and always respond in English. Explain what Vercel is."
     })
-    return Response.json({text})        
+    console.log({
+        inputTokens:response.usage.inputTokens,
+        outputTokens:response.usage.outputTokens,
+        totalTokens:response.usage.totalTokens
+    })
+    return Response.json({text:response.text})        
     }catch(error){
         console.log("Error,",error)
         return Response.json({error:"Failed to generate text"},{status:500})
